@@ -5,6 +5,8 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { FavoritesProvider } from "./contexts/FavoritesContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import AuthModal from "./components/AuthModal";
 import Home from "./pages/Home";
 import Listings from "./pages/Listings";
 import PropertyDetail from "./pages/PropertyDetail";
@@ -12,6 +14,8 @@ import MapPage from "./pages/Map";
 import AddProperty from "./pages/AddProperty";
 import Dashboard from "./pages/Dashboard";
 import Favorites from "./pages/Favorites";
+import Popular from "./pages/Popular";
+import PopularToggle from "./components/PopularToggle";
 
 function Router() {
   return (
@@ -24,30 +28,34 @@ function Router() {
       <Route path="/add-property" component={AddProperty} />
       <Route path="/sell" component={AddProperty} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/popular" component={Popular} />
       <Route path="/404" component={NotFound} />
       <Route component={NotFound} />
     </Switch>
   );
 }
 
-// NOTE: About Theme
-// - First choose a default theme according to your design style (dark or light bg), than change color palette in index.css
-//   to keep consistent foreground/background color across components
-// - If you want to make theme switchable, pass `switchable` ThemeProvider and use `useTheme` hook
-
 function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider defaultTheme="light" switchable>
-        <FavoritesProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Router />
-        </TooltipProvider>
-        </FavoritesProvider>
+        <AuthProvider>
+          <FavoritesProvider>
+            <TooltipProvider>
+              <Toaster />
+              {/* This wrapper will be blurred when the AuthModal is open */}
+              <div id="main-app-content">
+                <Router />
+                <PopularToggle />
+              </div>
+              <AuthModal />
+            </TooltipProvider>
+          </FavoritesProvider>
+        </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>
   );
 }
 
 export default App;
+

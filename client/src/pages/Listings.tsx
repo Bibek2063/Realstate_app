@@ -8,10 +8,20 @@ import { useEffect, useRef, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import PropertyCard from '@/components/PropertyCard';
 import { mockProperties, propertyApi, Property } from '@/lib/mockData';
-import { ChevronDown, Filter, X } from 'lucide-react';
+import { ChevronDown, Filter, X, Home as HomeIcon, BedDouble, Bath as BathIcon, Tag, SortAsc } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useStaggerScrollReveal } from '@/hooks/useGsapAnimations';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -92,128 +102,174 @@ export default function Listings() {
           <div className="layout-sidebar-content">
             {/* Sidebar - Sticky Filters */}
             <div ref={sidebarRef} className="sidebar-sticky">
-              <div className="glass-card p-6 rounded-xl">
-                <div className="flex items-center justify-between mb-6 md:hidden">
-                  <h2 className="font-bold text-foreground">Filters</h2>
+              <div className="glass-card p-6 rounded-2xl shadow-xl border border-white/10 overflow-hidden relative">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-primary" />
+
+                <div className="flex items-center justify-between mb-8 md:mb-6">
+                  <h2 className="font-bold text-xl text-foreground flex items-center gap-2">
+                    <Filter size={20} className="text-accent" />
+                    Filters
+                  </h2>
                   <button
                     onClick={() => setMobileFilterOpen(!mobileFilterOpen)}
-                    className="p-2 hover:bg-muted rounded"
+                    className="p-2 hover:bg-muted rounded-full md:hidden transition-colors"
                   >
                     {mobileFilterOpen ? <X size={20} /> : <Filter size={20} />}
                   </button>
                 </div>
 
-                <div className={`space-y-6 ${mobileFilterOpen ? 'block' : 'hidden md:block'}`}>
+                <div className={`space-y-8 ${mobileFilterOpen ? 'block' : 'hidden md:block'}`}>
                   {/* Price Range */}
-                  <div>
-                    <label className="block font-semibold text-foreground mb-3">
+                  <div className="space-y-4">
+                    <label className="text-sm font-bold text-foreground/80 flex items-center gap-2">
+                      <Tag size={16} className="text-accent" />
                       Price Range
                     </label>
-                    <div className="space-y-2">
-                      <input
-                        type="number"
-                        placeholder="Min price"
-                        value={filters.priceMin}
-                        onChange={(e) => handleFilterChange('priceMin', parseInt(e.target.value))}
-                        className="w-full bg-input rounded-lg px-3 py-2 text-sm outline-none"
-                      />
-                      <input
-                        type="number"
-                        placeholder="Max price"
-                        value={filters.priceMax}
-                        onChange={(e) => handleFilterChange('priceMax', parseInt(e.target.value))}
-                        className="w-full bg-input rounded-lg px-3 py-2 text-sm outline-none"
-                      />
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-1">
+                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground ml-1">Min</span>
+                        <Input
+                          type="number"
+                          placeholder="0"
+                          value={filters.priceMin === 0 ? '' : filters.priceMin}
+                          onChange={(e) => handleFilterChange('priceMin', parseInt(e.target.value) || 0)}
+                          className="bg-foreground/5 border-none focus-visible:ring-accent/30 h-10"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <span className="text-[10px] uppercase tracking-wider text-muted-foreground ml-1">Max</span>
+                        <Input
+                          type="number"
+                          placeholder="Any"
+                          value={filters.priceMax >= 10000000 ? '' : filters.priceMax}
+                          onChange={(e) => handleFilterChange('priceMax', parseInt(e.target.value) || 10000000)}
+                          className="bg-foreground/5 border-none focus-visible:ring-accent/30 h-10"
+                        />
+                      </div>
                     </div>
                   </div>
 
                   {/* Property Type */}
-                  <div>
-                    <label className="block font-semibold text-foreground mb-3">
+                  <div className="space-y-3">
+                    <label className="text-sm font-bold text-foreground/80 flex items-center gap-2">
+                      <HomeIcon size={16} className="text-accent" />
                       Property Type
                     </label>
-                    <select
-                      value={filters.type}
-                      onChange={(e) => handleFilterChange('type', e.target.value)}
-                      className="w-full bg-input rounded-lg px-3 py-2 text-sm outline-none"
+                    <Select
+                      value={filters.type || "all"}
+                      onValueChange={(value) => handleFilterChange('type', value === "all" ? "" : value)}
                     >
-                      <option value="">All Types</option>
-                      <option value="house">House</option>
-                      <option value="apartment">Apartment</option>
-                      <option value="condo">Condo</option>
-                      <option value="townhouse">Townhouse</option>
-                    </select>
+                      <SelectTrigger className="w-full bg-foreground/5 border-none h-11 px-4 focus:ring-accent/30 text-foreground">
+                        <SelectValue placeholder="All Types" />
+                      </SelectTrigger>
+                      <SelectContent className="glass-card border-white/20">
+                        <SelectItem value="all">All Types</SelectItem>
+                        <SelectItem value="house">House</SelectItem>
+                        <SelectItem value="apartment">Apartment</SelectItem>
+                        <SelectItem value="condo">Condo</SelectItem>
+                        <SelectItem value="townhouse">Townhouse</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
-                  {/* Bedrooms */}
-                  <div>
-                    <label className="block font-semibold text-foreground mb-3">
-                      Bedrooms
-                    </label>
-                    <select
-                      value={filters.bedrooms}
-                      onChange={(e) => handleFilterChange('bedrooms', parseInt(e.target.value))}
-                      className="w-full bg-input rounded-lg px-3 py-2 text-sm outline-none"
-                    >
-                      <option value={0}>Any</option>
-                      <option value={1}>1+</option>
-                      <option value={2}>2+</option>
-                      <option value={3}>3+</option>
-                      <option value={4}>4+</option>
-                      <option value={5}>5+</option>
-                    </select>
-                  </div>
+                  {/* Rooms Grid */}
+                  <div className="grid grid-cols-1 gap-6">
+                    {/* Bedrooms */}
+                    <div className="space-y-3">
+                      <label className="text-sm font-bold text-foreground/80 flex items-center gap-2">
+                        <BedDouble size={16} className="text-accent" />
+                        Bedrooms
+                      </label>
+                      <Select
+                        value={filters.bedrooms.toString()}
+                        onValueChange={(value) => handleFilterChange('bedrooms', parseInt(value))}
+                      >
+                        <SelectTrigger className="w-full bg-foreground/5 border-none h-11 px-4 focus:ring-accent/30 text-foreground">
+                          <SelectValue placeholder="Any" />
+                        </SelectTrigger>
+                        <SelectContent className="glass-card border-white/20">
+                          <SelectItem value="0">Any</SelectItem>
+                          <SelectItem value="1">1+</SelectItem>
+                          <SelectItem value="2">2+</SelectItem>
+                          <SelectItem value="3">3+</SelectItem>
+                          <SelectItem value="4">4+</SelectItem>
+                          <SelectItem value="5">5+</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                  {/* Bathrooms */}
-                  <div>
-                    <label className="block font-semibold text-foreground mb-3">
-                      Bathrooms
-                    </label>
-                    <select
-                      value={filters.bathrooms}
-                      onChange={(e) => handleFilterChange('bathrooms', parseInt(e.target.value))}
-                      className="w-full bg-input rounded-lg px-3 py-2 text-sm outline-none"
-                    >
-                      <option value={0}>Any</option>
-                      <option value={1}>1+</option>
-                      <option value={2}>2+</option>
-                      <option value={3}>3+</option>
-                      <option value={4}>4+</option>
-                    </select>
+                    {/* Bathrooms */}
+                    <div className="space-y-3">
+                      <label className="text-sm font-bold text-foreground/80 flex items-center gap-2">
+                        <BathIcon size={16} className="text-accent" />
+                        Bathrooms
+                      </label>
+                      <Select
+                        value={filters.bathrooms.toString()}
+                        onValueChange={(value) => handleFilterChange('bathrooms', parseInt(value))}
+                      >
+                        <SelectTrigger className="w-full bg-foreground/5 border-none h-11 px-4 focus:ring-accent/30 text-foreground">
+                          <SelectValue placeholder="Any" />
+                        </SelectTrigger>
+                        <SelectContent className="glass-card border-white/20">
+                          <SelectItem value="0">Any</SelectItem>
+                          <SelectItem value="1">1+</SelectItem>
+                          <SelectItem value="2">2+</SelectItem>
+                          <SelectItem value="3">3+</SelectItem>
+                          <SelectItem value="4">4+</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
 
                   {/* Verified Only */}
-                  <div>
-                    <label className="flex items-center gap-3 cursor-pointer">
-                      <input
-                        type="checkbox"
+                  <div className="pt-2">
+                    <div
+                      className="flex items-center space-x-3 cursor-pointer group"
+                      onClick={() => handleFilterChange('verified', !filters.verified)}
+                    >
+                      <Checkbox
+                        id="verified"
                         checked={filters.verified}
-                        onChange={(e) => handleFilterChange('verified', e.target.checked)}
-                        className="w-4 h-4 rounded"
+                        onCheckedChange={(checked) => handleFilterChange('verified', !!checked)}
+                        className="data-[state=checked]:bg-accent data-[state=checked]:border-accent border-muted-foreground/30"
                       />
-                      <span className="font-semibold text-foreground">Verified Only</span>
-                    </label>
+                      <label
+                        htmlFor="verified"
+                        className="text-sm font-bold text-foreground cursor-pointer group-hover:text-accent transition-colors"
+                      >
+                        Verified Listings Only
+                      </label>
+                    </div>
                   </div>
 
+                  <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent my-2" />
+
                   {/* Sort */}
-                  <div>
-                    <label className="block font-semibold text-foreground mb-3">
+                  <div className="space-y-3">
+                    <label className="text-sm font-bold text-foreground/80 flex items-center gap-2">
+                      <SortAsc size={16} className="text-accent" />
                       Sort By
                     </label>
-                    <select
+                    <Select
                       value={filters.sortBy}
-                      onChange={(e) => handleFilterChange('sortBy', e.target.value)}
-                      className="w-full bg-input rounded-lg px-3 py-2 text-sm outline-none"
+                      onValueChange={(value) => handleFilterChange('sortBy', value)}
                     >
-                      <option value="newest">Newest First</option>
-                      <option value="price-low">Price: Low to High</option>
-                      <option value="price-high">Price: High to Low</option>
-                      <option value="popular">Most Popular</option>
-                    </select>
+                      <SelectTrigger className="w-full bg-foreground/5 border-none h-11 px-4 focus:ring-accent/30 text-foreground">
+                        <SelectValue placeholder="Newest First" />
+                      </SelectTrigger>
+                      <SelectContent className="glass-card border-white/20">
+                        <SelectItem value="newest">Newest First</SelectItem>
+                        <SelectItem value="price-low">Price: Low to High</SelectItem>
+                        <SelectItem value="price-high">Price: High to Low</SelectItem>
+                        <SelectItem value="popular">Most Popular</SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   {/* Reset Button */}
-                  <button
+                  <Button
+                    variant="ghost"
                     onClick={() =>
                       setFilters({
                         priceMin: 0,
@@ -225,10 +281,10 @@ export default function Listings() {
                         sortBy: 'newest',
                       })
                     }
-                    className="w-full btn-secondary text-sm"
+                    className="w-full text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all font-bold text-xs uppercase tracking-widest pt-4"
                   >
-                    Reset Filters
-                  </button>
+                    Clear All Filters
+                  </Button>
                 </div>
               </div>
             </div>

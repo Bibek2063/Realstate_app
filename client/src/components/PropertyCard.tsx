@@ -4,12 +4,14 @@
  * Glassmorphism styling with GSAP animations
  */
 
-import { Link } from 'wouter';
+import React, { useRef } from 'react';
+import { Link, useLocation } from 'wouter';
 import { Property } from '@/lib/mockData';
 import { Heart, MapPin, Bed, Bath, Ruler, Zap } from 'lucide-react';
-import { useRef } from 'react';
 import { useFavorites } from '@/contexts/FavoritesContext';
+import { useAuth } from '@/contexts/AuthContext';
 import gsap from 'gsap';
+
 
 interface PropertyCardProps {
   property: Property;
@@ -18,9 +20,29 @@ interface PropertyCardProps {
 
 export default function PropertyCard({ property, isWishlisted = false }: PropertyCardProps) {
   const { isFavorited, toggleFavorite } = useFavorites();
+  const { isAuthenticated, showAuthModal } = useAuth();
+  const [, setLocation] = useLocation();
   const isWishlist = isFavorited(property.id) || isWishlisted;
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
+
+  const handleCardClick = () => {
+    if (isAuthenticated) {
+      setLocation(`/property/${property.id}`);
+    } else {
+      showAuthModal();
+    }
+  };
+
+  const handleFavoriteClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isAuthenticated) {
+      toggleFavorite(property.id);
+    } else {
+      showAuthModal();
+    }
+  };
 
   const handleMouseEnter = () => {
     if (cardRef.current) {
@@ -65,19 +87,23 @@ export default function PropertyCard({ property, isWishlisted = false }: Propert
   }).format(property.price);
 
   return (
-    <Link href={`/property/${property.id}`}>
+    <div
+      onClick={handleCardClick}
+      className="block w-full h-full"
+    >
       <div
         ref={cardRef}
-        className="property-card cursor-pointer group"
+        className="property-card cursor-pointer group h-full flex flex-col"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
         {/* Image Container - 3:2 Ratio */}
-        <div ref={imageRef} className="property-card-image relative">
+        <div ref={imageRef} className="property-card-image relative flex-shrink-0 aspect-[3/2]">
           <img
             src={property.media.images[0]}
             alt={property.title}
             className="w-full h-full object-cover"
+            style={{ objectFit: 'cover' }}
           />
 
           {/* Badges */}
@@ -95,11 +121,8 @@ export default function PropertyCard({ property, isWishlisted = false }: Propert
 
           {/* Wishlist Button */}
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              toggleFavorite(property.id);
-            }}
-            className="absolute top-3 left-3 bg-white/90 hover:bg-white p-2 rounded-full transition-all hover:scale-110"
+            onClick={handleFavoriteClick}
+            className="absolute top-3 left-3 bg-white/90 hover:bg-white p-2 rounded-full transition-all hover:scale-110 z-10"
             aria-label={isWishlist ? 'Remove from favorites' : 'Add to favorites'}
           >
             <Heart
@@ -123,14 +146,14 @@ export default function PropertyCard({ property, isWishlisted = false }: Propert
         </div>
 
         {/* Content */}
-        <div className="property-card-content">
+        <div className="property-card-content flex-1 flex flex-col">
           {/* Title */}
           <h3 className="font-bold text-foreground text-lg mb-2 line-clamp-2 group-hover:text-accent transition-colors">
             {property.title}
           </h3>
 
           {/* Location */}
-          <div className="flex items-start gap-1 text-muted-foreground text-sm mb-4">
+          <div className="flex items-start gap-1 text-muted-foreground text-sm mb-4 min-h-[3rem]">
             <MapPin size={16} className="flex-shrink-0 mt-0.5" />
             <span className="line-clamp-2">
               {property.location.address}, {property.location.city}
@@ -138,7 +161,7 @@ export default function PropertyCard({ property, isWishlisted = false }: Propert
           </div>
 
           {/* Key Features */}
-          <div className="grid grid-cols-3 gap-3 mb-4 py-3 border-y border-border">
+          <div className="grid grid-cols-3 gap-3 mb-4 py-3 border-y border-border mt-auto">
             <div className="text-center">
               <div className="flex items-center justify-center gap-1 text-foreground font-semibold mb-1">
                 <Bed size={16} />
@@ -178,6 +201,6 @@ export default function PropertyCard({ property, isWishlisted = false }: Propert
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }

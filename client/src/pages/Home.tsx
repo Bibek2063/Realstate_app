@@ -93,10 +93,11 @@ export default function Home() {
         className="relative w-full overflow-hidden"
         style={{
           minHeight: '75vh',
-          backgroundImage: `url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&h=900&fit=crop')`,
+          backgroundImage: `url('/images/download.jpg')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundAttachment: 'fixed',
+          backgroundRepeat: 'no-repeat'
         }}
       >
         {/* Dark Overlay */}
@@ -253,9 +254,10 @@ export default function Home() {
             {/* Right Image */}
             <div ref={imageWhyRef} className="relative h-96 rounded-2xl overflow-hidden glass-card">
               <img
-                src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&h=600&fit=crop"
+                src="/images/Futuristic Dream Mansion in Dubai _ The $300M Oceanfront Sky Estate!.jpg"
                 alt="Why Choose PropertyHub"
                 className="w-full h-full object-cover"
+                style={{ objectFit: 'cover' }}
               />
             </div>
           </div>

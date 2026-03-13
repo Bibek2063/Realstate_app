@@ -61,6 +61,15 @@ export interface Property {
   }>;
 }
 
+export interface PopularVideo {
+  id: string;
+  videoUrl: string;
+  title: string;
+  location: string;
+  tags: string[];
+  likes: number;
+}
+
 // Mock agents
 const agents = [
   {
@@ -132,9 +141,10 @@ export const mockProperties: Property[] = [
     },
     media: {
       images: [
-        'https://private-us-east-1.manuscdn.com/sessionFile/6oP4f6RhllrSt2w3hbRRGt/sandbox/XO4ft8tBSOuwLutjJqLoUN-img-1_1771416972000_na1fn_aGVyby1sdXh1cnktaG9tZQ.png?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvNm9QNGY2UmhsbHJTdDJ3M2hiUlJHdC9zYW5kYm94L1hPNGZ0OHRCU091d0x1dGpKcUxvVU4taW1nLTFfMTc3MTQxNjk3MjAwMF9uYTFmbl9hR1Z5Ynkxc2RYaDFjbmt0YUc5dFpRLnBuZz94LW9zcy1wcm9jZXNzPWltYWdlL3Jlc2l6ZSx3XzE5MjAsaF8xOTIwL2Zvcm1hdCx3ZWJwL3F1YWxpdHkscV84MCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5ODc2MTYwMH19fV19&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=j4Pxpif30Tz0hcsPqoI-589amdjXKERrPBK13ovYRuRmyY0Z0dJR2qb~AF7VfwQAkYR~XXGRf2OnNVOyXnagfHCjkeFwusH44rKmEhcgiSHEIUbHCABLzeeU2yby0KrQublJr71P5FqQ97tMiGegZ-0FY5~kXU67JONDSAS1SShTCr4RHkZHFthjytTi4eQzlZnfrLNaA44MNMVnqKRK5JHJW9gOLqu1BqR-rBui~xSxF0wVd49tuLTn0ZPTI7~~ASk1Rvuaiqdjr5iDLj~6UVTBfXru1R096xMguDyhulNIv63IWVPKJaLPL~~4M2naeabQgzsLzz5qxgiUe87gtQ__',
+        '/images/Dream house.jpg',
+        'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=800&fit=crop',
       ],
-      video: 'https://example.com/property-video.mp4',
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-luxury-house-exterior-at-night-1563-preview.mp4',
     },
     analytics: {
       views: 2847,
@@ -182,8 +192,10 @@ export const mockProperties: Property[] = [
     },
     media: {
       images: [
-        'https://private-us-east-1.manuscdn.com/sessionFile/6oP4f6RhllrSt2w3hbRRGt/sandbox/XO4ft8tBSOuwLutjJqLoUN-img-2_1771416973000_na1fn_aGVyby1tb2Rlcm4tYXBhcnRtZW50.png?x-oss-process=image/resize,w_1920,h_1920/format,webp/quality,q_80&Expires=1798761600&Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9wcml2YXRlLXVzLWVhc3QtMS5tYW51c2Nkbi5jb20vc2Vzc2lvbkZpbGUvNm9QNGY2UmhsbHJTdDJ3M2hiUlJHdC9zYW5kYm94L1hPNGZ0OHRCU091d0x1dGpKcUxvVU4taW1nLTJfMTc3MTQxNjk3MzAwMF9uYTFmbl9hR1Z5YnkxdGIyUmxjbTR0WVhCaGNuUnRaVzUwLnBuZz94LW9zcy1wcm9jZXNzPWltYWdlL3Jlc2l6ZSx3XzE5MjAsaF8xOTIwL2Zvcm1hdCx3ZWJwL3F1YWxpdHkscV84MCIsIkNvbmRpdGlvbiI6eyJEYXRlTGVzc1RoYW4iOnsiQVdTOkVwb2NoVGltZSI6MTc5ODc2MTYwMH19fV19&Key-Pair-Id=K2HSFNDJXOU9YS&Signature=tZn7mo9eXnAs~agPsmGEkJKDoAsLsAlrOAJpt5AL5ZZXN86WebozS3TvwQaNHMNNBOjFvB5RkgVNwhuM~ZFBftZRk-TTc9U6AQ5GQYoGm7x-s5z-Zs~495wzR132PcBj-skREHbINuLO84tbnJXg9nCY8VxPWek37N1FpvahJEDzVhCyyiC1pNnI9z741Pu~vCIofivIC0wBcAl4ROMu0VaB5VO~vb35BguExPyUAVf2uVAg-9YjH7WaFascBOGrX1u~WjWgWVysYHWbyWp~MyhT~IjC9kmZViFIKFOZIPdEFEegiYKLBck7JvioiqYeEUABJiHYnoHDHm93p146HA__',
+        '/images/Tour the Most Unique Angular Mansion Ever Created! 🧩.jpg',
+        'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?w=1200&h=800&fit=crop',
       ],
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-modern-apartment-interior-view-34676-preview.mp4',
     },
     analytics: {
       views: 1923,
@@ -231,8 +243,10 @@ export const mockProperties: Property[] = [
     },
     media: {
       images: [
-        'https://images.unsplash.com/photo-1570129477492-45a003537e1f?w=1200&h=800&fit=crop',
+        '/images/This Multi-Level LED Mansion Is Pure Architectural Brilliance.jpg',
+        'https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=1200&h=800&fit=crop',
       ],
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-cozy-house-in-the-suburbs-12502-preview.mp4',
     },
     analytics: {
       views: 1456,
@@ -250,30 +264,30 @@ export const mockProperties: Property[] = [
   },
   {
     id: 'prop-4',
-    title: 'Beachfront Luxury Condo',
-    price: 1200000,
+    title: 'The Obsidian Estate',
+    price: 4500000,
     location: {
-      address: '2100 Ocean Boulevard',
-      city: 'Miami',
-      state: 'FL',
-      zipCode: '33139',
-      lat: 25.7617,
-      lng: -80.1918,
+      address: '902 Bel Air Rd',
+      city: 'Bel Air',
+      state: 'CA',
+      zipCode: '90077',
+      lat: 34.0837,
+      lng: -118.4468,
     },
-    area: 2800,
-    type: 'condo',
-    bedrooms: 3,
-    bathrooms: 2,
-    floors: 1,
-    builtYear: 2020,
-    facing: 'east',
-    roadAccess: 'Direct beach access',
+    area: 12000,
+    type: 'house',
+    bedrooms: 6,
+    bathrooms: 8,
+    floors: 3,
+    builtYear: 2023,
+    facing: 'south',
+    roadAccess: 'Gated private estate',
     amenities: {
       parking: true,
       water: true,
       electricity: true,
       internet: true,
-      garden: false,
+      garden: true,
       security: true,
       pool: true,
       gym: true,
@@ -281,43 +295,45 @@ export const mockProperties: Property[] = [
     },
     media: {
       images: [
-        'https://images.unsplash.com/photo-1512917774080-9b274b3d0facb?w=1200&h=800&fit=crop',
+        'https://images.unsplash.com/photo-1613977257363-707ba9348227?w=1200&h=800&fit=crop',
+        'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&h=800&fit=crop',
       ],
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-luxury-villa-with-swimming-pool-and-palm-trees-1520-preview.mp4',
     },
     analytics: {
-      views: 3124,
-      saves: 201,
-      popularity: 95,
+      views: 5240,
+      saves: 432,
+      popularity: 98,
     },
     verified: true,
     agent: agents[3],
-    description: 'Stunning beachfront property with direct ocean views, private balcony, and resort-style amenities. Perfect vacation or investment property.',
+    description: 'A cinematic masterpiece of architecture. The Obsidian Estate features dark-themed minimalist design with floor-to-ceiling glass and panoramic canyon views.',
     priceHistory: [
-      { date: '2024-01-01', price: 1100000 },
-      { date: '2024-02-01', price: 1150000 },
-      { date: '2024-03-01', price: 1200000 },
+      { date: '2024-01-01', price: 4200000 },
+      { date: '2024-02-01', price: 4350000 },
+      { date: '2024-03-01', price: 4500000 },
     ],
   },
   {
     id: 'prop-5',
-    title: 'Modern Tech Hub Townhouse',
-    price: 875000,
+    title: 'The Glass Pavilion',
+    price: 3250000,
     location: {
-      address: '456 Innovation Drive',
-      city: 'San Francisco',
-      state: 'CA',
-      zipCode: '94105',
-      lat: 37.7749,
-      lng: -122.4194,
+      address: '456 Innovation Way',
+      city: 'Aspen',
+      state: 'CO',
+      zipCode: '81611',
+      lat: 39.1911,
+      lng: -106.8175,
     },
-    area: 2400,
-    type: 'townhouse',
-    bedrooms: 3,
-    bathrooms: 2,
-    floors: 3,
-    builtYear: 2021,
-    facing: 'west',
-    roadAccess: 'Close to tech corridor',
+    area: 6500,
+    type: 'house',
+    bedrooms: 4,
+    bathrooms: 5,
+    floors: 2,
+    builtYear: 2024,
+    facing: 'north',
+    roadAccess: 'Mountain view access',
     amenities: {
       parking: true,
       water: true,
@@ -325,69 +341,82 @@ export const mockProperties: Property[] = [
       internet: true,
       garden: true,
       security: true,
+      pool: true,
+      gym: true,
       balcony: true,
     },
     media: {
       images: [
-        'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=1200&h=800&fit=crop',
+        'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&h=800&fit=crop',
+        'https://images.unsplash.com/photo-1512914890251-2f96a9b09293?w=1200&h=800&fit=crop',
       ],
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-interior-of-a-modern-living-room-with-large-windows-4433-preview.mp4',
     },
     analytics: {
-      views: 1678,
-      saves: 112,
-      popularity: 82,
+      views: 2890,
+      saves: 165,
+      popularity: 89,
     },
     verified: true,
     agent: agents[0],
-    description: 'Modern townhouse in vibrant neighborhood with smart home features. Walking distance to restaurants and tech companies.',
+    description: 'Ultra-modern glass pavilion tucked away in the mountains. High-tech smart home features combined with raw architectural beauty.',
     priceHistory: [
-      { date: '2024-01-01', price: 800000 },
-      { date: '2024-02-01', price: 837500 },
-      { date: '2024-03-01', price: 875000 },
+      { date: '2024-01-01', price: 3000000 },
+      { date: '2024-02-01', price: 3125000 },
+      { date: '2024-03-01', price: 3250000 },
     ],
   },
   {
     id: 'prop-6',
-    title: 'Charming Historic Brownstone',
-    price: 950000,
+    title: 'Midnight Architectural Marvel',
+    price: 5950000,
     location: {
-      address: '234 Park Avenue',
-      city: 'Boston',
-      state: 'MA',
-      zipCode: '02108',
-      lat: 42.3601,
-      lng: -71.0589,
+      address: '234 Azabu-juban',
+      city: 'Minato City',
+      state: 'Tokyo',
+      zipCode: '106-0045',
+      lat: 35.6548,
+      lng: 139.7328,
     },
-    area: 2600,
+    area: 8400,
     type: 'house',
-    bedrooms: 4,
-    bathrooms: 2,
+    bedrooms: 5,
+    bathrooms: 6,
     floors: 4,
-    builtYear: 1890,
+    builtYear: 2024,
     facing: 'south',
-    roadAccess: 'Tree-lined historic street',
+    roadAccess: 'High-end residential district',
     amenities: {
-      parking: false,
+      parking: true,
       water: true,
       electricity: true,
       internet: true,
       garden: true,
-      security: false,
-      balcony: false,
+      security: true,
+      pool: true,
+      gym: true,
+      balcony: true,
     },
     media: {
       images: [
-        'https://images.unsplash.com/photo-1576941089067-2de3dd663e4f?w=1200&h=800&fit=crop',
+        '/images/Insane Modern Mansion with Nighttime Luxury Aesthetic.jpg',
+        'https://images.unsplash.com/photo-1600585154526-990dcea4db0d?w=1200&h=800&fit=crop',
       ],
+      video: 'https://assets.mixkit.co/videos/preview/mixkit-night-view-of-a-modern-house-exterior-32496-preview.mp4',
     },
     analytics: {
-      views: 987,
-      saves: 67,
-      popularity: 68,
+      views: 4120,
+      saves: 287,
+      popularity: 94,
     },
-    verified: false,
-    agent: agents[1],
-    description: 'Beautifully restored historic brownstone with original architectural details. Charming neighborhood with excellent walkability.',
+    verified: true,
+    agent: agents[2],
+    description: 'A structural masterpiece featuring sharp angles and dark textures. This Tokyo estate offers unprecedented luxury and privacy in the heart of the city.',
+    priceHistory: [
+      { date: '2024-01-01', price: 5500000 },
+      { date: '2024-02-01', price: 5750000 },
+      { date: '2024-03-01', price: 5950000 },
+    ],
   },
 ];
 
@@ -397,25 +426,27 @@ export const mockProperties: Property[] = [
 export const propertyApi = {
   async getProperties(filters?: {
     type?: string;
-    minPrice?: number;
-    maxPrice?: number;
+    priceMin?: number;
+    priceMax?: number;
     bedrooms?: number;
     bathrooms?: number;
     city?: string;
+    verified?: boolean;
+    sortBy?: string;
   }): Promise<Property[]> {
     await new Promise(resolve => setTimeout(resolve, 300));
-    
+
     let results = [...mockProperties];
-    
+
     if (filters) {
-      if (filters.type) {
+      if (filters.type && filters.type !== '') {
         results = results.filter(p => p.type === filters.type);
       }
-      if (filters.minPrice) {
-        results = results.filter(p => p.price >= filters.minPrice!);
+      if (filters.priceMin !== undefined) {
+        results = results.filter(p => p.price >= filters.priceMin!);
       }
-      if (filters.maxPrice) {
-        results = results.filter(p => p.price <= filters.maxPrice!);
+      if (filters.priceMax !== undefined) {
+        results = results.filter(p => p.price <= filters.priceMax!);
       }
       if (filters.bedrooms) {
         results = results.filter(p => p.bedrooms >= filters.bedrooms!);
@@ -424,12 +455,35 @@ export const propertyApi = {
         results = results.filter(p => p.bathrooms >= filters.bathrooms!);
       }
       if (filters.city) {
-        results = results.filter(p => 
+        results = results.filter(p =>
           p.location.city.toLowerCase().includes(filters.city!.toLowerCase())
         );
       }
+      if (filters.verified) {
+        results = results.filter(p => p.verified === true);
+      }
+
+      // Sorting
+      if (filters.sortBy) {
+        switch (filters.sortBy) {
+          case 'price-low':
+            results = results.sort((a, b) => a.price - b.price);
+            break;
+          case 'price-high':
+            results = results.sort((a, b) => b.price - a.price);
+            break;
+          case 'popular':
+            results = results.sort((a, b) => b.analytics.popularity - a.analytics.popularity);
+            break;
+          case 'newest':
+          default:
+            // Assuming prop-1, prop-2 etc are in order of newest
+            results = results.sort((a, b) => b.id.localeCompare(a.id));
+            break;
+        }
+      }
     }
-    
+
     return results;
   },
 
@@ -442,7 +496,7 @@ export const propertyApi = {
     await new Promise(resolve => setTimeout(resolve, 250));
     const property = mockProperties.find(p => p.id === propertyId);
     if (!property) return [];
-    
+
     return mockProperties
       .filter(p => p.id !== propertyId && p.type === property.type)
       .slice(0, count);
@@ -465,3 +519,86 @@ export const propertyApi = {
     };
   },
 };
+
+export const mockPopularVideos: PopularVideo[] = [
+  {
+    id: 'vid-1',
+    videoUrl: '/videos/short-10.mp4',
+    title: 'European Classic Estate',
+    location: 'Paris, France',
+    tags: ['Classic', 'Europe', 'Art'],
+    likes: 2900
+  },
+  {
+    id: 'vid-2',
+    videoUrl: '/videos/short-2.mp4',
+    title: 'Modern Glass House',
+    location: 'Beverly Hills, CA',
+    tags: ['Modern', 'Design', 'Glass'],
+    likes: 2100
+  },
+  {
+    id: 'vid-3',
+    videoUrl: '/videos/short-3.mp4',
+    title: 'Infinity Pool Oasis',
+    location: 'Malibu, CA',
+    tags: ['Pool', 'View', 'Sunset'],
+    likes: 4850
+  },
+  {
+    id: 'vid-4',
+    videoUrl: '/videos/short-4.mp4',
+    title: 'Minimalist Penthouse',
+    location: 'Miami, FL',
+    tags: ['Minimalist', 'City', 'Penthouse'],
+    likes: 1560
+  },
+  {
+    id: 'vid-5',
+    videoUrl: '/videos/short-5.mp4',
+    title: 'Forest Retreat',
+    location: 'Portland, OR',
+    tags: ['Nature', 'Wood', 'Quiet'],
+    likes: 920
+  },
+  {
+    id: 'vid-6',
+    videoUrl: '/videos/short-6.mp4',
+    title: 'Lakeside Mansion',
+    location: 'Lake Como, Italy',
+    tags: ['Lake', 'Mansion', 'Classic'],
+    likes: 5600
+  },
+  {
+    id: 'vid-7',
+    videoUrl: '/videos/short-7.mp4',
+    title: 'Golden Hour Estate',
+    location: 'Santorini, Greece',
+    tags: ['Greece', 'Sunset', 'Villa'],
+    likes: 2800
+  },
+  {
+    id: 'vid-8',
+    videoUrl: '/videos/short-8.mp4',
+    title: 'Ultra-Modern Smart Villa',
+    location: 'Dubai, UAE',
+    tags: ['Smart Home', 'Dubai', 'Futuristic'],
+    likes: 4100
+  },
+  {
+    id: 'vid-9',
+    videoUrl: '/videos/short-9.mp4',
+    title: 'Tropical Paradise',
+    location: 'Phuket, Thailand',
+    tags: ['Tropical', 'BeachFront', 'Luxury'],
+    likes: 3850
+  },
+  {
+    id: 'vid-10',
+    videoUrl: '/videos/short-1.mp4',
+    title: 'Roman Luxury Villa',
+    location: 'Rome, Italy',
+    tags: ['Luxury', 'Italy', 'Historic'],
+    likes: 3420
+  }
+];

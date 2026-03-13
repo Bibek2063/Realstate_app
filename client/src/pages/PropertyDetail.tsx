@@ -15,6 +15,11 @@ import Navbar from '@/components/Navbar';
 import PropertyCard from '@/components/PropertyCard';
 import { Heart, Share2, Phone, Mail, MapPin, Bed, Bath, Ruler, Calendar, Zap, TrendingUp } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
 
 export default function PropertyDetail() {
   const [, params] = useRoute('/property/:id');
@@ -23,10 +28,17 @@ export default function PropertyDetail() {
   const [similarProperties, setSimilarProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const [wishlist, setWishlist] = useState(false);
-  const [imageIndex, setImageIndex] = useState(0);
   const galleryRef = useRef<HTMLDivElement>(null);
   const detailsRef = useScrollReveal();
   const agentRef = useScrollReveal();
+
+  // combine images and video into a single media list for the slider
+  // User wants second slide to be a video
+  const mediaList = property ? [
+    { type: 'image', url: property.media.images[0] },
+    { type: 'video', url: property.media.video },
+    ...property.media.images.slice(1).map(img => ({ type: 'image', url: img }))
+  ] : [];
 
   // Gallery entrance animation
   useEffect(() => {
@@ -37,7 +49,7 @@ export default function PropertyDetail() {
         { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }
       );
     }
-  }, []);
+  }, [loading]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -97,78 +109,62 @@ export default function PropertyDetail() {
       <Navbar />
 
       <div className="container py-8">
-        {/* Image Gallery */}
-        <div ref={galleryRef} className="mb-8">
-          <div className="relative h-96 md:h-[500px] bg-muted rounded-2xl overflow-hidden group">
-            <img
-              src={property.media.images[imageIndex]}
-              alt={property.title}
-              className="w-full h-full object-cover"
-            />
+        {/* Image Gallery Slider */}
+        <div ref={galleryRef} className="mb-8 relative">
+          <Carousel className="w-full">
+            <CarouselContent>
+              {mediaList.map((item, idx) => (
+                <CarouselItem key={idx}>
+                  <div className="relative h-96 md:h-[600px] bg-muted rounded-2xl overflow-hidden shadow-2xl">
+                    {item.type === 'video' ? (
+                      <video
+                        src={item.url as string}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        className="w-full h-full object-cover"
+                        style={{ objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <img
+                        src={item.url as string}
+                        alt={`${property.title} - view ${idx + 1}`}
+                        className="w-full h-full object-cover"
+                        style={{ objectFit: 'cover' }}
+                      />
+                    )}
 
-            {/* Navigation Buttons */}
-            {property.media.images.length > 1 && (
-              <>
-                <button
-                  onClick={() =>
-                    setImageIndex(
-                      (imageIndex - 1 + property.media.images.length) %
-                        property.media.images.length
-                    )
-                  }
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
-                >
-                  ‹
-                </button>
-                <button
-                  onClick={() =>
-                    setImageIndex((imageIndex + 1) % property.media.images.length)
-                  }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all"
-                >
-                  ›
-                </button>
-              </>
-            )}
+                    {/* Media Type Badge */}
+                    <div className="absolute top-4 left-4 bg-black/50 backdrop-blur-md text-white px-3 py-1 rounded-full text-xs font-semibold">
+                      {item.type === 'video' ? 'Video Tour' : `Image ${idx + 1}`}
+                    </div>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
 
-            {/* Image Counter */}
-            <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-sm">
-              {imageIndex + 1} / {property.media.images.length}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="absolute top-4 right-4 flex gap-2">
-              <button
-                onClick={() => setWishlist(!wishlist)}
-                className="bg-white/90 hover:bg-white p-3 rounded-full transition-all hover:scale-110"
-              >
-                <Heart
-                  size={20}
-                  className={wishlist ? 'fill-red-500 text-red-500' : 'text-gray-600'}
-                />
-              </button>
-              <button className="bg-white/90 hover:bg-white p-3 rounded-full transition-all hover:scale-110">
-                <Share2 size={20} className="text-gray-600" />
-              </button>
-            </div>
+          {/* Floating Action Buttons */}
+          <div className="absolute top-4 right-4 flex gap-2 z-10">
+            <button
+              onClick={() => setWishlist(!wishlist)}
+              className="bg-white/90 dark:bg-slate-800/90 hover:bg-white p-3 rounded-full shadow-lg transition-all hover:scale-110"
+            >
+              <Heart
+                size={20}
+                className={wishlist ? 'fill-red-500 text-red-500' : 'text-foreground/70'}
+              />
+            </button>
+            <button className="bg-white/90 dark:bg-slate-800/90 hover:bg-white p-3 rounded-full shadow-lg transition-all hover:scale-110">
+              <Share2 size={20} className="text-foreground/70" />
+            </button>
           </div>
 
-          {/* Thumbnail Gallery */}
-          {property.media.images.length > 1 && (
-            <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
-              {property.media.images.map((img, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setImageIndex(idx)}
-                  className={`flex-shrink-0 h-20 w-20 rounded-lg overflow-hidden border-2 transition-all ${
-                    idx === imageIndex ? 'border-accent' : 'border-border'
-                  }`}
-                >
-                  <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Swipe Hint */}
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/30 backdrop-blur-sm text-white/80 px-4 py-2 rounded-full text-xs pointer-events-none transition-opacity opacity-100 group-hover:opacity-0">
+            Swipe to see more
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -268,11 +264,10 @@ export default function PropertyDetail() {
                 {Object.entries(property.amenities).map(([key, value]) => (
                   <div
                     key={key}
-                    className={`p-3 rounded-lg border ${
-                      value
-                        ? 'bg-accent/10 border-accent text-accent'
-                        : 'bg-muted/30 border-border text-muted-foreground'
-                    }`}
+                    className={`p-3 rounded-lg border ${value
+                      ? 'bg-accent/10 border-accent text-accent'
+                      : 'bg-muted/30 border-border text-muted-foreground'
+                      }`}
                   >
                     <p className="font-semibold capitalize text-sm">
                       {key === 'internet' ? 'WiFi' : key}
@@ -345,7 +340,7 @@ export default function PropertyDetail() {
             {similarProperties.length > 0 && (
               <div className="mb-8">
                 <h2 className="text-2xl font-bold text-foreground mb-4">Similar Properties</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {similarProperties.map(prop => (
                     <PropertyCard key={prop.id} property={prop} />
                   ))}
@@ -364,7 +359,8 @@ export default function PropertyDetail() {
                   <img
                     src={property.agent.avatar}
                     alt={property.agent.name}
-                    className="w-24 h-24 rounded-full mx-auto mb-4"
+                    className="w-24 h-24 rounded-full mx-auto mb-4 object-cover"
+                    style={{ objectFit: 'cover' }}
                   />
                   <h4 className="font-bold text-lg text-foreground mb-1">
                     {property.agent.name}
